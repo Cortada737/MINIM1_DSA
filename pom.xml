@@ -36,6 +36,7 @@
         <jackson.version>2.17.1</jackson.version>
         <log4j.version>2.23.1</log4j.version>
         <junit.version>5.10.2</junit.version>
+        <swagger.version>2.2.21</swagger.version>
     </properties>
 
     <dependencies>
@@ -102,6 +103,46 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>${log4j.version}</version>
+        </dependency>
+
+        <!-- ==================================================================
+             5) Swagger / OpenAPI: documentació interactiva
+             ================================================================== -->
+
+        <!-- Anotacions OpenAPI (@Operation, @ApiResponse, @Schema...) -->
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+
+        <!-- Integració Swagger amb JAX-RS 2: escaneja les anotacions i
+             exposa /openapi.json i /openapi.yaml automàticament -->
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-jaxrs2</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+
+        <!-- Servlet API necessari per swagger-jaxrs2 en entorns Grizzly -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+
+        <!-- Swagger UI: interfície web interactiva a /swagger-ui -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>swagger-ui</artifactId>
+            <version>5.17.14</version>
+        </dependency>
+
+        <!-- Suport per servir WebJars des de Grizzly/Jersey -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>webjars-locator</artifactId>
+            <version>0.52</version>
         </dependency>
 
         <!-- ==================================================================

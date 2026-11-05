@@ -8,6 +8,11 @@ import edu.upc.eetac.dsa.models.PlaDeVol;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -31,6 +36,7 @@ import java.util.List;
  * @JsonIgnore a les llistes de plans de Dron i Pilot.
  * Codis HTTP: 200, 201, 400, 404, 409 i 500 (via GlobalExceptionMapper).
  */
+@Tag(name = "Dron Manager", description = "Gestió de drons, pilots i plans de vol")
 @Path("/api")
 @Produces(MediaType.APPLICATION_JSON)
 public class DronService {
@@ -48,6 +54,12 @@ public class DronService {
     }
 
     /** POST /api/drones: afegeix un dron (201). */
+    @Operation(summary = "Afegeix un dron", description = "Crea un nou dron a la flota.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "201", description = "Dron creat correctament"),
+        @ApiResponse(responseCode = "400", description = "Dades invàlides"),
+        @ApiResponse(responseCode = "409", description = "Ja existeix un dron amb aquest ID")
+    })
     @POST
     @Path("/drones")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -67,6 +79,13 @@ public class DronService {
     }
 
     /** POST /api/flightplans: crea un pla de vol (201/400/404/409). */
+    @Operation(summary = "Crea un pla de vol", description = "Assigna un dron i un pilot a un pla de vol.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "201", description = "Pla de vol creat correctament"),
+        @ApiResponse(responseCode = "400", description = "Dades invàlides o camps obligatoris absents"),
+        @ApiResponse(responseCode = "404", description = "Dron o pilot no trobat"),
+        @ApiResponse(responseCode = "409", description = "Conflicte: el dron o pilot ja té un pla actiu")
+    })
     @POST
     @Path("/flightplans")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -95,6 +114,11 @@ public class DronService {
     }
 
     /** GET /api/pilots/{id}/flightplans: plans d'un pilot (200/404). */
+    @Operation(summary = "Obté els plans de vol d'un pilot", description = "Retorna tots els plans de vol associats a un pilot pel seu ID.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Llista de plans de vol"),
+        @ApiResponse(responseCode = "404", description = "Pilot no trobat")
+    })
     @GET
     @Path("/pilots/{id}/flightplans")
     public Response getFlightPlansByPilot(@PathParam("id") String id) {
@@ -107,6 +131,12 @@ public class DronService {
     }
 
     /** POST /api/pilots: afegeix un pilot (201). */
+    @Operation(summary = "Afegeix un pilot", description = "Crea un nou pilot al sistema.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "201", description = "Pilot creat correctament"),
+        @ApiResponse(responseCode = "400", description = "Dades invàlides"),
+        @ApiResponse(responseCode = "409", description = "Ja existeix un pilot amb aquest ID")
+    })
     @POST
     @Path("/pilots")
     @Consumes(MediaType.APPLICATION_JSON)
