@@ -1,0 +1,12 @@
+# Fitxers generats per Maven
+target/
+
+# Fitxers de l'IDE IntelliJ IDEA
+.idea/
+*.iml
+
+# Fitxers del sistema operatiu (macOS)
+.DS_Store
+
+# Logs generats en temps d'execució
+*.log

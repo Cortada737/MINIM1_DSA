@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+  Aquest fitxer declara:
+    - El tipus de projecte Maven i les seves coordenades (groupId, artifactId).
+    - La versió de Java amb què es compila el codi.
+    - Totes les dependències externes (Jersey/JAX-RS, Jackson, Log4j i JUnit).
+    - Els plugins necessaris per compilar, executar els tests i arrencar el servei.
+
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Coordenades del projecte -->
+    <groupId>edu.upc.eetac.dsa</groupId>
+    <artifactId>dron-manager</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>Dron Manager - Mínim 1 DSA</name>
+
+    <properties>
+        <!-- Codificació de tots els fitxers font i recursos -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <!-- Versió de Java. Es compila amb release 11 perquè el projecte
+             sigui compatible amb els laboratoris de l'EETAC. -->
+        <maven.compiler.release>11</maven.compiler.release>
+
+        <!-- Versions centralitzades de les llibreries -->
+        <jersey.version>2.41</jersey.version>
+        <jackson.version>2.17.1</jackson.version>
+        <log4j.version>2.23.1</log4j.version>
+        <junit.version>5.10.2</junit.version>
+    </properties>
+
+    <dependencies>
+        <!-- ==================================================================
+             1) JAX-RS / Jersey: implementació del servei REST
+             ================================================================== -->
+
+        <!-- Nucli del servidor JAX-RS (anotacions @Path, @GET, @POST...) -->
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-server</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+
+        <!-- Contenidor HTTP Grizzly, que permet arrencar el servei REST
+             des d'una classe Java normal (mètode main). -->
+        <dependency>
+            <groupId>org.glassfish.jersey.containers</groupId>
+            <artifactId>jersey-container-grizzly2-http</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+
+        <!-- Suport de JSON per a Jersey: serialitza/deserialitza els models
+             automàticament gràcies a Jackson. -->
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-jackson</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+
+        <!-- Gestor d'injecció de dependències que necessita Jersey 2.x
+             per instanciar els recursos REST. -->
+        <dependency>
+            <groupId>org.glassfish.jersey.inject</groupId>
+            <artifactId>jersey-hk2</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+
+        <!-- ==================================================================
+             2) Jackson: conversió Java <-> JSON
+             ================================================================== -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+        <!-- Suport per serialitzar/deserialitzar java.time.LocalDateTime -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+        <!-- ==================================================================
+             3) Log4j 2: traces del sistema (MAI System.out.println)
+             ================================================================== -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+
+        <!-- ==================================================================
+             4) JUnit 5: proves unitàries
+             ================================================================== -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Compilador de Java -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+            </plugin>
+
+            <!-- Executor dels tests amb suport complet per a JUnit 5 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+            </plugin>
+
+            <!-- Permet arrencar el servei REST amb: mvn exec:java -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <mainClass>edu.upc.eetac.dsa.Main</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

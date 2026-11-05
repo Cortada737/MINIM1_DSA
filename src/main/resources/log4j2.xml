@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ============================================================================
+  CONFIGURACIÓ DE LOG4J 2
+  ============================================================================
+  Aquest fitxer substitueix qualsevol crida a System.out.println.
+  Totes les traces de l'aplicació (INFO, ERROR, FATAL...) surten per aquest
+  appender de consola amb un format homogeni:
+      hora  [fil]  nivell  classe  -  missatge
+
+  - El nivell arrel és "info": es mostren INFO, WARN, ERROR i FATAL.
+  - Els missatges DEBUG no es mostren, per no embrutar la sortida de l'examen.
+  ============================================================================
+-->
+<Configuration status="WARN">
+
+    <Appenders>
+        <!-- Appender de consola: escriu a la sortida estàndard del procés.
+             Log4j s'encarrega internament de fer l'escriptura; nosaltres
+             NO cridem mai System.out.println des del codi Java. -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <!-- Logger arrel: tota la jerarquia de classes hereta aquest nivell -->
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+
+</Configuration>
